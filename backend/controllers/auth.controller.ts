@@ -129,3 +129,8 @@ export async function refreshToken (req: Request, res: Response) {
     res.status(500).json({ message: 'Server error', error: error.message })
   }
 }
+
+
+export async function getProfile (req: Request, res: Response) {
+  
+}
