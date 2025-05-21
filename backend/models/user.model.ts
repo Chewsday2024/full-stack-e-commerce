@@ -42,14 +42,19 @@ const userSchema = new mongoose.Schema({
 })
 
 
+export interface fnCheckPassword {
+  comparePassword(password: string): Promise<boolean>
+}
+
+
 
 
 export type userType = InferSchemaType<typeof userSchema>
 
-export type mongoUserType = HydratedDocument<userType>
+export type mongoUserType = HydratedDocument<userType, fnCheckPassword>
 
 
-export const User = mongoose.model('User', userSchema)
+
 
 userSchema.pre('save', async function ( next ) {
   if (!this.isModified('password')) return next()
@@ -67,3 +72,6 @@ userSchema.pre('save', async function ( next ) {
 userSchema.methods.comparePassword = async function ( password: string ) {
   return bcrypt.compare(password, this.password)
 }
+
+
+export const User = mongoose.model('User', userSchema)
