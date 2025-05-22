@@ -4,9 +4,6 @@ import { Product } from "../models/product.model.js";
 
 
 
-
-
-
 export async function getCartProducts (req: Request, res: Response) {
   try {
     const products = await Product.find({ _id: { $in: req.user?.cartItems }})
