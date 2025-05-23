@@ -1,9 +1,9 @@
 import { Request, Response } from "express"
 import jwt from 'jsonwebtoken'
 
+import { mongoUserType, User, userType } from "../models/user.model.js"
 import { storeRefreshToken } from "../utils/storeRefreshToken.js"
 import { generateTokens } from "../utils/generateTokens.js"
-import { mongoUserType, User, userType } from "../models/user.model.js"
 import { setCookies } from "../utils/setCookies.js"
 import { redis } from "../lib/redis.js"
 
@@ -132,5 +132,11 @@ export async function refreshToken (req: Request, res: Response) {
 
 
 export async function getProfile (req: Request, res: Response) {
-  
+  try {
+    res.json(req.user)
+  } catch (error: any) {
+    console.log('Error in refreshToken controller', error.message)
+
+    res.status(500).json({ message: 'Server error', error: error.message })
+  }
 }

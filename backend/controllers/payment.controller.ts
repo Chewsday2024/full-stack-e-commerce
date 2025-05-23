@@ -4,7 +4,6 @@ import { stripe } from "../lib/stripe.js";
 import { createStripeCoupon } from "../utils/createStripeCoupon.js";
 import { createNewCoupon } from "../utils/createNewCoupon.js";
 import { mongoOrderType, Order } from "../models/order.model.js";
-import { mongoProductType } from "../models/product.model.js";
 
 
 export async function createCheckoutSession (req: Request, res: Response) {

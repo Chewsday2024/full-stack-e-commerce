@@ -1,8 +1,10 @@
 import { Request, Response } from "express"
-import { Product, productType } from "../models/product.model.js"
-import { redis } from "../lib/redis.js"
+
 import cloudinary from "../lib/cloudinary.js"
+import { redis } from "../lib/redis.js"
+
 import { updateFeaturedProductsCache } from "../utils/updateFeaturedProductsCache.js"
+import { Product, productType } from "../models/product.model.js"
 
 
 
