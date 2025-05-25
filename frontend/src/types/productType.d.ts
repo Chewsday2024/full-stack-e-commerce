@@ -8,4 +8,5 @@ export type productType = {
   isFeatured?: boolean
   createdAt?: Date
   updatedAt?: Date
+  quantity?: number
 }

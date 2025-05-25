@@ -78,7 +78,7 @@ export const useProductStore = create<productStoreType>(set => ({
 
       set(pre => ({
         products: pre.products.map(product => 
-          product._id?.toString() === productId ? res.data : product
+          product._id?.toString() === productId ? {...product, isFeatured: res.data.isFeatured} : product
         ),
         loading: false
       }))

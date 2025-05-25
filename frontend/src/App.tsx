@@ -13,17 +13,25 @@ import LoginPage from "./pages/LoginPage"
 import AdminPage from "./pages/AdminPage"
 import HomePage from "./pages/HomePage"
 import CategoryPage from "./pages/CategoryPage"
+import { useCartStore } from "./stores/useCartStore"
 
 
 
 function App() {
   const { user, checkAuth, checkingAuth } = useUserStore()
+  const { getCartItems } = useCartStore()
 
   useEffect(() => {
     checkAuth()
   }, [checkAuth])
 
+  useEffect(() => {
+    if (user) getCartItems()
+  }, [user, getCartItems])
+
+  
   if (checkingAuth) return <LoadingSpinner />
+
 
   return (
     <>

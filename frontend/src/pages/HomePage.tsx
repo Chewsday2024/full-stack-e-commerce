@@ -11,6 +11,7 @@ function HomePage() {
     { href: "/bags", name: "Bags", imageUrl: "/bags.png" },
   ]
 
+ 
 
   return (
     <div className="relative min-h-screen text-white overflow-hidden">
