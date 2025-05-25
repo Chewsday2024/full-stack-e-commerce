@@ -55,7 +55,7 @@ function ProductsList() {
 
         <tbody className='bg-gray-800 divide-y divide-gray-700'>
           {products.map(product => (
-            <tr key={product._id.toString()} className='hover:bg-gray-700'>
+            <tr key={product._id?.toString()} className='hover:bg-gray-700'>
               <td className='px-6 py-4 whitespace-nowrap'>
                 <div className='flex items-center justify-center gap-3'>
                   <img
@@ -72,7 +72,7 @@ function ProductsList() {
 
               <td className='px-6 py-4 whitespace-nowrap'>
                 <div className='text-sm text-gray-300 text-center'>
-                  $&nbsp;{product.price.toFixed(2)}
+                  $&nbsp;{Number(product.price).toFixed(2)}
                 </div>
               </td>
 
@@ -85,7 +85,7 @@ function ProductsList() {
               <td className='px-6 py-4 whitespace-nowrap'>
                 <div className='flex justify-center'>
                   <button
-                    onClick={() => toggleFeaturedProduct(product._id.toString())}
+                    onClick={() => product._id && toggleFeaturedProduct(product._id.toString())}
                     className={`p-1 rounded-full hover:bg-yellow-500 transition-colors duration-200 cursor-pointer ${
                       product.isFeatured
                         ? 'bg-yellow-400 text-gray-900'
@@ -100,7 +100,7 @@ function ProductsList() {
               <td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
                 <div className='flex justify-center'>
                   <button
-                    onClick={() => deleteProduct(product._id.toString())}
+                    onClick={() => product._id && deleteProduct(product._id.toString())}
                     className='text-red-400 hover:text-red-300 cursor-pointer'
                   >
                     <Trash className='h-5 w-5' />

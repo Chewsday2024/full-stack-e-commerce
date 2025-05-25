@@ -1,20 +1,21 @@
-import type { mongoProductType } from './../../../backend/models/product.model';
 import { create } from 'zustand'
 import axios from '../lib/axios'
 import toast from 'react-hot-toast'
 import { AxiosError } from 'axios'
+import type { productType } from '../types/productType'
 
 
 
 
 type productStoreType = {
-  products: mongoProductType[]
+  products: productType[]
   loading: boolean
-  setProducts: ( products: mongoProductType[] ) => void
-  createProduct: ( productData: mongoProductType ) => Promise<void>
+  setProducts: ( products: productType[] ) => void
+  createProduct: ( productData: productType ) => Promise<void>
   fetchAllProducts: () => Promise<void>
   deleteProduct: ( productId: string ) => Promise<void>
   toggleFeaturedProduct: ( productId: string ) => Promise<void>
+  fetchProductsByCategory: ( category: string ) => Promise<void>
 }
 
 
@@ -45,12 +46,23 @@ export const useProductStore = create<productStoreType>(set => ({
       if (error instanceof AxiosError) toast.error(error.response?.data.error || 'Failed to fetch products')
     }
   },
+  fetchProductsByCategory: async ( category ) => {
+    set({ loading: true })
+    try {
+      const res = await axios.get(`/products/category/${category}`)
+      set({ products: res.data.products, loading: false })
+    } catch (error) {
+      set({ loading: false })
+
+      if (error instanceof AxiosError) toast.error(error.response?.data.error || 'Failed to fetch products')
+    }
+  },
   deleteProduct: async ( productId ) => {
     set({ loading: true })
     try {
       await axios.delete(`/products/${productId}`)
       set(pre => ({
-        products: pre.products.filter(product => product._id.toString() !== productId),
+        products: pre.products.filter(product => product._id?.toString() !== productId),
         loading: false
       }))
     } catch (error) {
@@ -66,7 +78,7 @@ export const useProductStore = create<productStoreType>(set => ({
 
       set(pre => ({
         products: pre.products.map(product => 
-          product._id.toString() === productId ? res.data : product
+          product._id?.toString() === productId ? res.data : product
         ),
         loading: false
       }))
