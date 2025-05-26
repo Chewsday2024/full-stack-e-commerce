@@ -13,9 +13,10 @@ type productStoreType = {
   setProducts: ( products: productType[] ) => void
   createProduct: ( productData: productType ) => Promise<void>
   fetchAllProducts: () => Promise<void>
+  fetchProductsByCategory: ( category: string ) => Promise<void>
   deleteProduct: ( productId: string ) => Promise<void>
   toggleFeaturedProduct: ( productId: string ) => Promise<void>
-  fetchProductsByCategory: ( category: string ) => Promise<void>
+  fetchFeaturedProducts: () => Promise<void>
 }
 
 
@@ -86,6 +87,16 @@ export const useProductStore = create<productStoreType>(set => ({
       set({ loading: false })
 
       if (error instanceof AxiosError) toast.error(error.response?.data.error || 'Failed to update product')
+    }
+  },
+  fetchFeaturedProducts: async () => {
+    set({ loading: true })
+
+    try {
+      const res = await axios.get('/products/featured')
+      set({ products: res.data, loading: false })
+    } catch (error) {
+      console.error('Error fetching featured products:', error)
     }
   }
 }))
