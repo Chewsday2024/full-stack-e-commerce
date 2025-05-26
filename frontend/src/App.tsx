@@ -8,14 +8,16 @@ import { useUserStore } from "./stores/useUserStore"
 import Navbar from "./components/Navbar"
 
 
+import PurchaseSuccessPage from "./pages/PurchaseSuccessPage"
+import PurchaseCancelPage from "./pages/PurchaseCancelPage"
+import CategoryPage from "./pages/CategoryPage"
 import SignupPage from "./pages/SignupPage"
 import LoginPage from "./pages/LoginPage"
 import AdminPage from "./pages/AdminPage"
 import HomePage from "./pages/HomePage"
-import CategoryPage from "./pages/CategoryPage"
-import { useCartStore } from "./stores/useCartStore"
 import CartPage from "./pages/CartPage"
 
+import { useCartStore } from "./stores/useCartStore"
 
 
 function App() {
@@ -55,6 +57,8 @@ function App() {
             <Route path="/secret-dashboard" element={user?.role === 'admin' ? <AdminPage /> : <Navigate to={'/login'} />} />
             <Route path="/category/:category" element={<CategoryPage />} />
             <Route path="/cart" element={user ? <CartPage /> : <Navigate to={'/login'} />} />
+            <Route path="/purchase-success" element={user ? <PurchaseSuccessPage /> : <Navigate to={'/login'} />} />
+            <Route path="/purchase-cancel" element={user ? <PurchaseCancelPage /> : <Navigate to={'/login'} />} />
           </Routes>
         </div>
       </div>

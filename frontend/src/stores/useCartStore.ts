@@ -16,6 +16,7 @@ type cartStoreType = {
   isCouponApplied: boolean
   getCartItems: () => Promise<void>
   addToCart: ( product: productType ) => Promise<void>
+  clearCart: () => void
   removeFromCart: ( productId: string ) => Promise<void>
   updateQuantity: ( product: string, quantity: number ) => Promise<void>
   calculateTotals: () => void
@@ -57,6 +58,9 @@ export const useCartStore = create<cartStoreType>((set, get) => ({
     } catch (error) {
       if (error instanceof AxiosError) toast.error(error.response?.data.message || 'An error occurred')
     }
+  },
+  clearCart: () => {
+    set({ cart: [], coupon: null, total: 0, subtotal: 0 })
   },
   removeFromCart: async ( productId ) => {
     await axios.delete('/cart', { data: { productId } })
