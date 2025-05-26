@@ -15,6 +15,9 @@ type cartStoreType = {
   subtotal: number
   isCouponApplied: boolean
   getCartItems: () => Promise<void>
+  getMyCoupon: () => Promise<void>
+  applyCoupon: ( code: string ) => Promise<void>
+  removeCoupon: () => Promise<void>
   addToCart: ( product: productType ) => Promise<void>
   clearCart: () => void
   removeFromCart: ( productId: string ) => Promise<void>
@@ -39,6 +42,29 @@ export const useCartStore = create<cartStoreType>((set, get) => ({
 
       if (error instanceof AxiosError) toast.error(error.response?.data.message || 'An error occurred')
     }
+  },
+  getMyCoupon: async () => {
+    try {
+      const res = await axios.get('/coupons')
+      set({ coupon: res.data })
+    } catch (error) {
+      console.error('Error fetching coupon:', error)
+    }
+  },
+  applyCoupon: async ( code ) => {
+    try {
+      const res = await axios.post('/coupons/validate', { code })
+      set({ coupon: res.data, isCouponApplied: true })
+      get().calculateTotals()
+      toast.success('Coupon applied successfully')
+    } catch (error) {
+      if (error instanceof AxiosError) toast.error(error.response?.data.message || 'Failed to apply coupon')
+    }
+  },
+  removeCoupon: async () => {
+    set({ coupon: null, isCouponApplied: false })
+    get().calculateTotals()
+    toast.success('Coupon removed')
   },
   addToCart: async ( product ) => {
     try {

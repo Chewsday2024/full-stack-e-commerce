@@ -1,6 +1,8 @@
 import { Coupon } from "../models/coupon.model.js";
 
 export async function createNewCoupon (userId: string) {
+  await Coupon.findOneAndDelete({ userId })
+  
   const newCoupon = new Coupon({
     code: 'GIFT' + Math.random().toString(36).substring(2, 8).toUpperCase(),
     discountPercentage: 10,
