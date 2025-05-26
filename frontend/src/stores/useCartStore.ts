@@ -13,8 +13,11 @@ type cartStoreType = {
   coupon: couponType | null
   total: number
   subtotal: number
+  isCouponApplied: boolean
   getCartItems: () => Promise<void>
   addToCart: ( product: productType ) => Promise<void>
+  removeFromCart: ( productId: string ) => Promise<void>
+  updateQuantity: ( product: string, quantity: number ) => Promise<void>
   calculateTotals: () => void
 }
 
@@ -24,6 +27,7 @@ export const useCartStore = create<cartStoreType>((set, get) => ({
   coupon: null,
   total: 0,
   subtotal: 0,
+  isCouponApplied: false,
   getCartItems: async () => {
     try {
       const res = await axios.get('/cart')
@@ -53,6 +57,27 @@ export const useCartStore = create<cartStoreType>((set, get) => ({
     } catch (error) {
       if (error instanceof AxiosError) toast.error(error.response?.data.message || 'An error occurred')
     }
+  },
+  removeFromCart: async ( productId ) => {
+    await axios.delete('/cart', { data: { productId } })
+
+    set(pre => ({cart: pre.cart.filter(item => item._id !== productId)}))
+
+    get().calculateTotals()
+  },
+  updateQuantity: async ( productId, quantity ) => {
+    if (quantity === 0) {
+      get().removeFromCart(productId)
+      return
+    }
+
+    await axios.put(`/cart/${productId}`, { quantity })
+
+    set(pre => ({
+      cart: pre.cart.map(item => (item._id === productId ? { ...item, quantity } : item))
+    }))
+
+    get().calculateTotals()
   },
   calculateTotals: () => {
     const { cart, coupon } = get()

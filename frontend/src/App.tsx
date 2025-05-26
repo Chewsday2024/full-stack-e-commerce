@@ -14,6 +14,7 @@ import AdminPage from "./pages/AdminPage"
 import HomePage from "./pages/HomePage"
 import CategoryPage from "./pages/CategoryPage"
 import { useCartStore } from "./stores/useCartStore"
+import CartPage from "./pages/CartPage"
 
 
 
@@ -26,10 +27,12 @@ function App() {
   }, [checkAuth])
 
   useEffect(() => {
-    if (user) getCartItems()
+    if (!user) return
+    
+    getCartItems()
   }, [user, getCartItems])
 
-  
+
   if (checkingAuth) return <LoadingSpinner />
 
 
@@ -51,6 +54,7 @@ function App() {
             <Route path="/login" element={!user ? <LoginPage /> : <Navigate to={'/'} />} />
             <Route path="/secret-dashboard" element={user?.role === 'admin' ? <AdminPage /> : <Navigate to={'/login'} />} />
             <Route path="/category/:category" element={<CategoryPage />} />
+            <Route path="/cart" element={user ? <CartPage /> : <Navigate to={'/login'} />} />
           </Routes>
         </div>
       </div>
