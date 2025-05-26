@@ -23,10 +23,11 @@ type userStoreType = {
   login: ({ email, password }: props) => Promise<void>
   checkAuth: () => Promise<void>
   logout: () => Promise<void>
+  refreshToken: () => Promise<void>
 }
 
 
-export const useUserStore = create<userStoreType>(set => ({
+export const useUserStore = create<userStoreType>((set, get) => ({
   user: null,
   loading: false,
   checkingAuth: true,
@@ -55,7 +56,7 @@ export const useUserStore = create<userStoreType>(set => ({
     } catch (error) {
       set({ loading: false })
 
-      if (error instanceof AxiosError) toast.error(error.response?.data.message)
+      if (error) toast.error('錯誤的信箱或密碼')
     }
   },
   checkAuth: async () => {
@@ -75,5 +76,55 @@ export const useUserStore = create<userStoreType>(set => ({
       if (error instanceof AxiosError) toast.error(error.response?.data.message || 'An error occurred during logout')
     }
 
+  },
+  refreshToken: async () => {
+    if (get().checkingAuth) return
+
+    set({ checkingAuth: true })
+
+    try {
+      const res = await axios.post('/auth/refresh-token')
+      set({ checkingAuth: false })
+      return res.data
+    } catch (error) {
+      set({ user: null, checkingAuth: false })
+
+      throw error
+    }
   }
 }))
+
+
+
+let refreshPromise: Promise<void> | null = null 
+
+axios.interceptors.response.use(
+  (res) => res,
+  async (error) => {
+    const originalRequest = error.config
+    if (error instanceof AxiosError) {
+      if (error.response?.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true
+
+        try {
+          if (refreshPromise) {
+            await refreshPromise
+
+            return axios(originalRequest)
+          }
+
+
+          refreshPromise = useUserStore.getState().refreshToken()
+          await refreshPromise
+          refreshPromise = null
+
+          return axios(originalRequest)
+        } catch (refreshError) {
+          useUserStore.getState().logout()
+
+          return Promise.reject(refreshError)
+        }
+      }
+    }
+  }
+)

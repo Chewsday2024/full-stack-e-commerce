@@ -85,7 +85,8 @@ export const useCartStore = create<cartStoreType>((set, get) => ({
       if (error instanceof AxiosError) toast.error(error.response?.data.message || 'An error occurred')
     }
   },
-  clearCart: () => {
+  clearCart: async () => {
+    get().cart.forEach(item => item._id && get().removeFromCart(item._id))
     set({ cart: [], coupon: null, total: 0, subtotal: 0 })
   },
   removeFromCart: async ( productId ) => {
