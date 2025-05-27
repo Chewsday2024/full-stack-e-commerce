@@ -2,6 +2,7 @@ import { useState } from "react"
 import { motion } from 'framer-motion'
 import { Loader, PlusCircle, Upload } from "lucide-react"
 import { useProductStore } from "../stores/useProductStore"
+import toast from "react-hot-toast"
 
 
 
@@ -31,6 +32,8 @@ function CreateProductForm() {
         category: '',
         image: ''
       })
+
+      toast.success('新增產品成功！🎉')
     } catch (error) {
       if (error) console.log('error creating a product')
     }

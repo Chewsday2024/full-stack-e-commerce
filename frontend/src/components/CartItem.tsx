@@ -46,7 +46,7 @@ function CartItem({ item }: { item: productType}) {
             {item.name}
           </p>
 
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-gray-400 whitespace-pre-wrap">
             {item.description}
           </p>
 

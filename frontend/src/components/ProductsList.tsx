@@ -56,12 +56,12 @@ function ProductsList() {
         <tbody className='bg-gray-800 divide-y divide-gray-700'>
           {products.map(product => (
             <tr key={product._id?.toString()} className='hover:bg-gray-700'>
-              <td className='px-6 py-4 whitespace-nowrap'>
-                <div className='flex items-center justify-center gap-3'>
+              <td className='px-10 py-8 whitespace-nowrap'>
+                <div className='flex items-center justify-start gap-3'>
                   <img
                     src={product.image}
                     alt={product.name}
-                    className='h-10 w-10 rounded-full object-cover'
+                    className='h-16 w-16 rounded-full object-cover'
                   />
                   
                   <div className='text-sm font-medium text-white'>
@@ -71,7 +71,7 @@ function ProductsList() {
               </td>
 
               <td className='px-6 py-4 whitespace-nowrap'>
-                <div className='text-sm text-gray-300 text-center'>
+                <div className='text-sm text-gray-300 text-start'>
                   $&nbsp;{Number(product.price).toFixed(2)}
                 </div>
               </td>

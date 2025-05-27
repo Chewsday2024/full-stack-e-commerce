@@ -3,15 +3,19 @@ import { useEffect } from "react"
 import { motion } from 'framer-motion'
 import { useProductStore } from "../stores/useProductStore"
 import ProductCard from "../components/ProductCard"
+import LoadingSpinner from "../components/LoadingSpinner"
 
 function CategoryPage() {
-  const { fetchProductsByCategory, products } = useProductStore()
+  const { fetchProductsByCategory, products, loading } = useProductStore()
 
   const { category } = useParams()
 
   useEffect(() => {
     if (category) fetchProductsByCategory(category)
   }, [fetchProductsByCategory, category])
+
+
+  if (loading) return <LoadingSpinner />
 
 
   return (
