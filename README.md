@@ -5,7 +5,7 @@
 ## 🚨注意事項
 ### 由於佈署在 Render 上且使用免費方案，因此會有待機狀況產生，會需要等候幾秒鐘喚醒時間
 
-🚀[作品連結](https://full-stack-x-clone.onrender.com)<br />
+🚀[作品連結](https://full-stack-e-commerce-6ln4.onrender.com)<br />
 
 🎬[教學連結](https://www.youtube.com/watch?v=MDZC8VDZnV8) 15:12:46 開始<br />
 
